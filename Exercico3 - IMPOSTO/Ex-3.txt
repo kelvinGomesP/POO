@@ -1,0 +1,106 @@
+import java.text.DecimalFormat;
+import java.util.Scanner;
+
+class Item {
+    private String nome;
+    private double preco;
+    private boolean ehServico;
+    private boolean ehProduto;
+
+    public Item(String nome, double preco, boolean ehServico, boolean ehProduto) {
+        this.nome = nome;
+        this.preco = preco;
+        this.ehServico = ehServico;
+        this.ehProduto = ehProduto;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public boolean isEhServico() {
+        return ehServico;
+    }
+
+    public boolean isEhProduto() {
+        return ehProduto;
+    }
+}
+
+
+class ISS {
+    private static final double ALIQUOTA = 0.046;
+
+    public static double calcularImposto(double valor) {
+        return valor * ALIQUOTA;
+    }
+}
+
+
+class ICMS {
+    private static final double ALIQUOTA = 0.17;
+
+    public static double calcularImposto(double valor) {
+        return valor * ALIQUOTA;
+    }
+}
+
+// Classe para calcular o imposto IPI
+class IPI {
+    private static final double ALIQUOTA = 0.25;
+
+    public static double calcularImposto(double valor) {
+        return valor * ALIQUOTA;
+    }
+}
+
+public class CalculadoraImpostos {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        DecimalFormat df = new DecimalFormat("#.##");
+
+        while (true) {
+            System.out.println("Menu:");
+            System.out.println("1. Calcular Impostos e Taxas");
+            System.out.println("0. Sair");
+            System.out.print("Escolha uma opcao: ");
+            int escolha = scanner.nextInt();
+
+            if (escolha == 0) {
+                System.out.println("Programa encerrado.");
+                break;
+            } else if (escolha == 1) {
+                // Criar alguns itens de compra
+                Item itemServico = new Item("Serviço de Consultoria", 100.0, true, false);
+                Item itemProduto = new Item("Produto Eletronico", 500.0, false, true);
+
+
+                double iss = ISS.calcularImposto(itemServico.getPreco());
+                double icms = ICMS.calcularImposto(itemProduto.getPreco());
+                double ipi = IPI.calcularImposto(itemProduto.getPreco());
+
+             
+                double precoTotal = itemServico.getPreco() + itemProduto.getPreco() + iss + icms + ipi;
+
+                
+                System.out.println("Detalhes da operacao comercial:");
+                System.out.println("Item 1: " + itemServico.getNome());
+                System.out.println("  - Preco original do item: R$" + df.format(itemServico.getPreco()));
+                System.out.println("  - Imposto ISS: R$" + df.format(iss));
+                System.out.println("Item 2: " + itemProduto.getNome());
+                System.out.println("  - Preco original do item: R$" + df.format(itemProduto.getPreco()));
+                System.out.println("  - Imposto ICMS: R$" + df.format(icms));
+                System.out.println("  - Imposto IPI: R$" + df.format(ipi));
+                System.out.println("Preco Total da Operacao: R$" + df.format(precoTotal));
+            } else {
+                System.out.println("Opcao invalida. Por favor, escolha uma opcao valida.");
+            }
+        }
+
+        scanner.close();
+    }
+}
